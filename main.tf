@@ -66,7 +66,8 @@ data "cloudfoundry_service_plan" "workzone_api_plan" {
   service_offering_name = "build-workzone-standard"
   name                  = "standard"
   depends_on = [
-    btp_subaccount_subscription.workzone
+    btp_subaccount_subscription.workzone,
+    clocloudfoundry_space_role.space_manager
   ]
 }
 resource "cloudfoundry_service_instance" "workzone_api" {
@@ -94,7 +95,8 @@ data "cloudfoundry_service_plan" "task_center_plan" {
   service_offering_name = "one-inbox-service"
   name                  = "all-tasks"
   depends_on = [
-    btp_subaccount_subscription.workzone
+    btp_subaccount_subscription.workzone,
+    clocloudfoundry_space_role.space_manager
   ]
 }
 resource "cloudfoundry_service_instance" "task_center" {
