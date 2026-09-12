@@ -25,6 +25,19 @@ resource "cloudfoundry_space" "wz_space" {
   name = "workzone"
   org  = var.cf_org_id
 }
+resource "cloudfoundry_space_role" "space_manager" {
+  username = var.cf_administrator
+  origin   = local.idp_platform_origin
+  type     = "space_manager"
+  space    = cloudfoundry_space.wz_space.id
+}
+
+resource "cloudfoundry_space_role" "space_developer" {
+  username = var.cf_administrator
+  origin   = local.idp_platform_origin
+  type     = "space_developer"
+  space    = cloudfoundry_space.wz_space.id
+}
 
 # create a subscription to workzone
 resource "btp_subaccount_subscription" "workzone" {

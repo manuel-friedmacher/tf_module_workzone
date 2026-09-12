@@ -24,3 +24,12 @@ variable "cf_org_id" {
     error_message = "cf_org_id must be a valid Cloud Foundry organization ID."
   }
 }
+
+variable "cf_administrator" {
+  description = "Name of the user to be added to the Cloud Foundry space."
+  type        = string
+  validation {
+    condition     = can(regex("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", var.cf_administrator))
+    error_message = "cf_administrator must be a valid email address."
+  }
+}
