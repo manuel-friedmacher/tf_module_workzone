@@ -47,15 +47,15 @@ resource "btp_subaccount_role_collection_assignment" "wz_administrators" {
 data "cloudfoundry_service_plan" "workzone_api_plan" {
   service_offering_name = "build-workzone-standard"
   name                  = "standard"
+  depends_on = [
+    btp_subaccount_subscription.workzone
+  ]
 }
 resource "cloudfoundry_service_instance" "workzone_api" {
   name         = "workzone-api-cf"
   space        = cloudfoundry_space.wz_space.id
   service_plan = data.cloudfoundry_service_plan.workzone_api_plan.id
   type         = "managed"
-  depends_on = [
-    btp_subaccount_subscription.workzone
-  ]
   timeouts = {
     create = "1h"
     delete = "1h"
@@ -75,15 +75,15 @@ resource "cloudfoundry_service_credential_binding" "workzone_api_service_key" {
 data "cloudfoundry_service_plan" "task_center_plan" {
   service_offering_name = "one-inbox-service"
   name                  = "all-tasks"
+  depends_on = [
+    btp_subaccount_subscription.workzone
+  ]
 }
 resource "cloudfoundry_service_instance" "task_center" {
   name         = "taskcenter-cf"
   space        = cloudfoundry_space.wz_space.id
   service_plan = data.cloudfoundry_service_plan.task_center_plan.id
   type         = "managed"
-  depends_on = [
-    btp_subaccount_subscription.workzone
-  ]
   timeouts = {
     create = "1h"
     delete = "1h"
