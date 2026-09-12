@@ -1,4 +1,4 @@
-formatter: markdown table
+formatter: pretty
 output:
   file: README.md
   mode: inject
