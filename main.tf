@@ -1,3 +1,8 @@
+locals {
+  idp_platform_host   = split(".", var.btp_platform_idp)[0]
+  idp_platform_origin = "${local.idp_platform_host}-platform"
+}
+
 # Assignment of entitlements for SAP Workzone and Task Center
 resource "btp_subaccount_entitlement" "workzone_entitlement" {
   subaccount_id = var.subaccount_id
@@ -35,7 +40,7 @@ resource "btp_subaccount_subscription" "workzone" {
 # Assign the Launchpad_Admin role collection to the wz_administrators group
 resource "btp_subaccount_role_collection_assignment" "wz_administrators" {
   subaccount_id        = var.subaccount_id
-  origin               = var.btp_platform_idp
+  origin               = local.idp_platform_origin
   role_collection_name = "Launchpad_Admin"
   group_name           = "wz_administrators"
   depends_on = [
