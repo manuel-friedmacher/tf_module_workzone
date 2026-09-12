@@ -31,12 +31,15 @@ Subscribe to SAP Build Workzone Standard Edition and SAP Task Center
 | [cloudfoundry_service_instance.task_center](https://registry.terraform.io/providers/cloudfoundry/cloudfoundry/latest/docs/resources/service_instance) | resource |
 | [cloudfoundry_service_instance.workzone_api](https://registry.terraform.io/providers/cloudfoundry/cloudfoundry/latest/docs/resources/service_instance) | resource |
 | [cloudfoundry_space.wz_space](https://registry.terraform.io/providers/cloudfoundry/cloudfoundry/latest/docs/resources/space) | resource |
+| [cloudfoundry_space_role.space_developer](https://registry.terraform.io/providers/cloudfoundry/cloudfoundry/latest/docs/resources/space_role) | resource |
+| [cloudfoundry_space_role.space_manager](https://registry.terraform.io/providers/cloudfoundry/cloudfoundry/latest/docs/resources/space_role) | resource |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_btp_platform_idp"></a> [btp\_platform\_idp](#input\_btp\_platform\_idp) | FQDN of the Platform Identity Provider. | `string` | n/a | yes |
+| <a name="input_cf_administrator"></a> [cf\_administrator](#input\_cf\_administrator) | Name of the user to be added to the Cloud Foundry space. | `string` | n/a | yes |
 | <a name="input_cf_org_id"></a> [cf\_org\_id](#input\_cf\_org\_id) | ID of the Cloud Foundry organization. | `string` | n/a | yes |
 | <a name="input_subaccount_id"></a> [subaccount\_id](#input\_subaccount\_id) | ID of the subaccount to be trusted. | `string` | n/a | yes |
 
