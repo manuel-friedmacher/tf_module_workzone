@@ -22,7 +22,7 @@ resource "btp_subaccount_entitlement" "task_center_entitlement" {
 
 # Create the Cloud Foundry Space
 resource "cloudfoundry_space" "wz_space" {
-  name = "workzone"
+  name = var.cf_space_name
   org  = var.cf_org_id
 }
 resource "cloudfoundry_space_role" "space_manager" {
@@ -50,12 +50,12 @@ resource "btp_subaccount_subscription" "workzone" {
   ]
 }
 
-# Assign the Launchpad_Admin role collection to the wz_administrators group
+# Assign the Launchpad_Admin role collection to the Workzone administrators group.
 resource "btp_subaccount_role_collection_assignment" "wz_administrators" {
   subaccount_id        = var.subaccount_id
   origin               = local.idp_platform_origin
   role_collection_name = "Launchpad_Admin"
-  group_name           = "wz_administrators"
+  group_name           = var.workzone_administrators_group
   depends_on = [
     btp_subaccount_subscription.workzone
   ]
@@ -85,9 +85,6 @@ resource "cloudfoundry_service_credential_binding" "workzone_api_service_key" {
   type             = "key"
   name             = join("_", ["sk", "workzone", "api"])
   service_instance = cloudfoundry_service_instance.workzone_api.id
-  depends_on = [
-    cloudfoundry_service_instance.workzone_api
-  ]
 }
 
 # Create a service instance for the task center.
@@ -114,7 +111,4 @@ resource "cloudfoundry_service_credential_binding" "task_center_service_key" {
   type             = "key"
   name             = join("_", ["sk", "task", "center"])
   service_instance = cloudfoundry_service_instance.task_center.id
-  depends_on = [
-    cloudfoundry_service_instance.task_center
-  ]
 }
