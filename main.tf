@@ -44,10 +44,7 @@ resource "btp_subaccount_subscription" "workzone" {
   subaccount_id = var.subaccount_id
   app_name      = "SAPLaunchpad"
   plan_name     = "standard"
-  depends_on = [
-    btp_subaccount_entitlement.workzone_entitlement,
-    btp_subaccount_entitlement.workzone_api_entitlement
-  ]
+  depends_on    = [btp_subaccount_entitlement.workzone_entitlement, btp_subaccount_entitlement.workzone_api_entitlement]
 }
 
 # Assign the Launchpad_Admin role collection to the Workzone administrators group.
@@ -56,19 +53,20 @@ resource "btp_subaccount_role_collection_assignment" "wz_administrators" {
   origin               = local.idp_platform_origin
   role_collection_name = "Launchpad_Admin"
   group_name           = var.workzone_administrators_group
-  depends_on = [
-    btp_subaccount_subscription.workzone
-  ]
+  depends_on           = [btp_subaccount_subscription.workzone]
+}
+
+# Wait 15 seconds for Cloud Foundry to propagate permissions internally
+resource "time_sleep" "wait_for_cf_permissions" {
+  create_duration = "15s"
+  depends_on      = [cloudfoundry_space_role.space_manager, cloudfoundry_space_role.space_developer]
 }
 
 # Create a service instance for the workzone API
 data "cloudfoundry_service_plan" "workzone_api_plan" {
   service_offering_name = "build-workzone-standard"
   name                  = "standard"
-  depends_on = [
-    btp_subaccount_subscription.workzone,
-    cloudfoundry_space_role.space_manager
-  ]
+  depends_on            = [time_sleep.wait_for_cf_permissions]
 }
 resource "cloudfoundry_service_instance" "workzone_api" {
   name         = "workzone-api-cf"
@@ -91,10 +89,7 @@ resource "cloudfoundry_service_credential_binding" "workzone_api_service_key" {
 data "cloudfoundry_service_plan" "task_center_plan" {
   service_offering_name = "one-inbox-service"
   name                  = "all-tasks"
-  depends_on = [
-    btp_subaccount_subscription.workzone,
-    cloudfoundry_space_role.space_manager
-  ]
+  depends_on            = [time_sleep.wait_for_cf_permissions]
 }
 resource "cloudfoundry_service_instance" "task_center" {
   name         = "taskcenter-cf"
